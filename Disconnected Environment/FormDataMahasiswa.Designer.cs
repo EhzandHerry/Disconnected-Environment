@@ -278,6 +278,9 @@
             // cbxJenisKelamin
             // 
             this.cbxJenisKelamin.FormattingEnabled = true;
+            this.cbxJenisKelamin.Items.AddRange(new object[] {
+            "P",
+            "L"});
             this.cbxJenisKelamin.Location = new System.Drawing.Point(261, 174);
             this.cbxJenisKelamin.Name = "cbxJenisKelamin";
             this.cbxJenisKelamin.Size = new System.Drawing.Size(121, 21);

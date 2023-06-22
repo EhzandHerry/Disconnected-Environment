@@ -13,33 +13,22 @@ namespace Disconnected_Environment
 {
     public partial class FormDataStatusMahasiswa : Form
     {
-        private string stringConnection = "daata source=laptop-g2f55onu\\ehzandherry;" + "database=ProdiTI;User ID=sa;Password=Conex999";
+        private string stringConnection = "data source=laptop-g2f55onu\\ehzandherry;" + "database=Act6;User ID=sa;Password=Conex999";
         private SqlConnection koneksi;
 
         public FormDataStatusMahasiswa()
         {
             InitializeComponent();
-            koneksi = new SqlConnection();
+            koneksi = new SqlConnection(stringConnection);
             refreshform();
         }
 
-        private void dataGridView()
-        {
-            koneksi.Open();
-            string str = "select * from dbo.status_mahasiswa";
-            SqlDataAdapter da = new SqlDataAdapter(str, koneksi);
-            DataSet ds = new DataSet();
-            da.Fill(ds);
-            dataGridView1.DataSource = ds.Tables[0];
-            koneksi.Close();
-        }
+
 
         private void cbNama()
         {
             koneksi.Open();
-            string str = "select nama_mahasiswa from dbo.Mahasiswa where " +
-                "not EXISTS(select id_status from dbo.status_mahasiswa where)" +
-                "status_mahasiswa.nim = mahasiswa.nim";
+            string str = "SELECT nama_mahasiswa FROM mahasiswa";
             SqlCommand cmd = new SqlCommand(str, koneksi);
             SqlDataAdapter da = new SqlDataAdapter(str, koneksi);
             DataSet ds = new DataSet();
@@ -48,7 +37,7 @@ namespace Disconnected_Environment
             koneksi.Close();
 
             cbxNama.DisplayMember = "nama_mahasiswa";
-            cbxNama.ValueMember = "NIM";
+            cbxNama.ValueMember = "nim";
             cbxNama.DataSource = ds.Tables[0];
         }
 
@@ -91,7 +80,7 @@ namespace Disconnected_Environment
 
         private void button1_Click(object sender, EventArgs e)
         {
-            dataGridView();
+            dataGridView1_CellContentClick();
             btnOpen.Enabled = false;
         }
 
@@ -134,19 +123,19 @@ namespace Disconnected_Environment
                 kodeStatus = Convert.ToString(finalKodeStatusInt);
             }
             string queryString = "insert into dbo.status_mahasiswa(id_status, nim, status_mahasiswa, tahun_masuk)" +
-                "values(@NIM, @sm, @tm)";
+                "values(@ids, @nim, @sm, @tm)";
             SqlCommand cmd = new SqlCommand(queryString, koneksi);
             cmd.CommandType = CommandType.Text;
 
-            cmd.Parameters.Add(new SqlParameter("ids", kodeStatus));
-            cmd.Parameters.Add(new SqlParameter("NIM", nim));
-            cmd.Parameters.Add(new SqlParameter("sm", statusMahasiswa));
-            cmd.Parameters.Add(new SqlParameter("tm", tahunMasuk));
+            cmd.Parameters.Add(new SqlParameter("@ids", kodeStatus));
+            cmd.Parameters.Add(new SqlParameter("@nim", nim));
+            cmd.Parameters.Add(new SqlParameter("@sm", statusMahasiswa));
+            cmd.Parameters.Add(new SqlParameter("@tm", tahunMasuk));
             cmd.ExecuteNonQuery();
             koneksi.Close();
             MessageBox.Show("Data berhasil Disimpan", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
             refreshform();
-            dataGridView();
+            dataGridView1_CellContentClick();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -173,6 +162,24 @@ namespace Disconnected_Environment
             Form1 fm = new Form1();
             fm.Show();
             this.Hide();
+        }
+
+        private void dataGridView1_CellContentClick()
+        {
+            koneksi.Open();
+            string str = "select * from dbo.status_mahasiswa";
+            SqlDataAdapter da = new SqlDataAdapter(str, koneksi);
+            DataSet ds = new DataSet();
+            da.Fill(ds);
+            dataGridView1.DataSource = ds.Tables[0];
+            koneksi.Close();
+        }
+
+        private void FormDataStatusMahasiswa_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'act6DataSet.mahasiswa' table. You can move, or remove it, as needed.
+            this.mahasiswaTableAdapter.Fill(this.act6DataSet.mahasiswa);
+
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.cbxTahunMasuk = new System.Windows.Forms.ComboBox();
@@ -41,7 +42,12 @@
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.act6DataSet = new Disconnected_Environment.Act6DataSet();
+            this.mahasiswaBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.mahasiswaTableAdapter = new Disconnected_Environment.Act6DataSetTableAdapters.mahasiswaTableAdapter();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.act6DataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mahasiswaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -109,6 +115,7 @@
             // txtNIM
             // 
             this.txtNIM.AutoSize = true;
+            this.txtNIM.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.mahasiswaBindingSource, "nim", true));
             this.txtNIM.Location = new System.Drawing.Point(325, 252);
             this.txtNIM.Name = "txtNIM";
             this.txtNIM.Size = new System.Drawing.Size(38, 13);
@@ -126,6 +133,9 @@
             // cbxStatusMahasiswa
             // 
             this.cbxStatusMahasiswa.FormattingEnabled = true;
+            this.cbxStatusMahasiswa.Items.AddRange(new object[] {
+            "Aktif",
+            "Tidak Aktif"});
             this.cbxStatusMahasiswa.Location = new System.Drawing.Point(328, 282);
             this.cbxStatusMahasiswa.Name = "cbxStatusMahasiswa";
             this.cbxStatusMahasiswa.Size = new System.Drawing.Size(121, 21);
@@ -161,6 +171,20 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // act6DataSet
+            // 
+            this.act6DataSet.DataSetName = "Act6DataSet";
+            this.act6DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // mahasiswaBindingSource
+            // 
+            this.mahasiswaBindingSource.DataMember = "mahasiswa";
+            this.mahasiswaBindingSource.DataSource = this.act6DataSet;
+            // 
+            // mahasiswaTableAdapter
+            // 
+            this.mahasiswaTableAdapter.ClearBeforeFill = true;
+            // 
             // FormDataStatusMahasiswa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,7 +205,10 @@
             this.Controls.Add(this.dataGridView1);
             this.Name = "FormDataStatusMahasiswa";
             this.Text = "FormDataStatusMahasiswa";
+            this.Load += new System.EventHandler(this.FormDataStatusMahasiswa_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.act6DataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.mahasiswaBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -202,5 +229,8 @@
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnSave;
+        private Act6DataSet act6DataSet;
+        private System.Windows.Forms.BindingSource mahasiswaBindingSource;
+        private Act6DataSetTableAdapters.mahasiswaTableAdapter mahasiswaTableAdapter;
     }
 }

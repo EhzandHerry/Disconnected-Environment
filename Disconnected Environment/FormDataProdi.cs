@@ -41,7 +41,7 @@ namespace Disconnected_Environment
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
-            dataGridView();
+            dataGridView1_CellContentClick();
             btnOpen.Enabled = false;
         }
 
@@ -49,18 +49,6 @@ namespace Disconnected_Environment
         {
             refreshform();
         }
-
-        private void dataGridView()
-        {
-            koneksi.Open();
-            string str = "select id_prodi, nama_prodi From dbo.prodi";
-            SqlDataAdapter da = new SqlDataAdapter(str, koneksi);
-            DataSet ds = new DataSet("prodi");
-            da.Fill(ds);
-            dataGridView1.DataSource = ds.Tables[0];
-            koneksi.Close();
-        }
-
         private void npm_Click(object sender, EventArgs e)
         {
             nmp.Enabled = true;
@@ -87,7 +75,7 @@ namespace Disconnected_Environment
 
                 koneksi.Close();
                 MessageBox.Show("Data Berhasil Disimpan", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dataGridView();
+                dataGridView1_CellContentClick();
                 refreshform();
             }
 
@@ -108,7 +96,7 @@ namespace Disconnected_Environment
 
         private void btnOpen_Click_1(object sender, EventArgs e)
         {
-            dataGridView();
+            dataGridView1_CellContentClick();
             btnOpen.Enabled = false;
         }
 
@@ -128,28 +116,22 @@ namespace Disconnected_Environment
 
             
 
-            if (nmProdi == "")
+            if (nmProdi == ""  || iProdi == "")
             {
-                MessageBox.Show("Masukkan Nama Prodi", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Masukkan Keduanya", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 koneksi.Open();
-                string insertQuery = "INSERT INTO dbo.prodi (nama_prodi) VALUES (@nama_prodi);";
-                SqlCommand insertCommand = new SqlCommand(insertQuery, koneksi); 
-                insertCommand.CommandType = CommandType.Text;
-                insertCommand.Parameters.Add(new SqlParameter("id_prodi", iProdi));
-
-
-                string str = "insert into dbo.Prodi (nama_prodi)" + "values(@id)";
+                string str = "insert into dbo.prodi (id_prodi, nama_prodi) VALUES (@id_prodi, @nama_prodi)";
                 SqlCommand cmd = new SqlCommand(str, koneksi);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.Add(new SqlParameter("nama_prodi", nmProdi));
-                
-
-                koneksi.Close();
+                cmd.Parameters.Add(new SqlParameter("@id_prodi", iProdi));
+                cmd.Parameters.Add(new SqlParameter("@nama_prodi", nmProdi));
+                cmd.ExecuteNonQuery();
                 MessageBox.Show("Data Berhasil Disimpan", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                dataGridView();
+                koneksi.Close();
+                dataGridView1_CellContentClick();
                 refreshform();
             }
         }
@@ -164,6 +146,17 @@ namespace Disconnected_Environment
             ip.Enabled = true;
             btnSave.Enabled = true;
             btnClear.Enabled = true;
+        }
+
+        private void dataGridView1_CellContentClick()
+        {
+            koneksi.Open();
+            string str = "select id_prodi, nama_prodi From dbo.prodi";
+            SqlDataAdapter da = new SqlDataAdapter(str, koneksi);
+            DataTable dataTable = new DataTable();
+            da.Fill(dataTable);
+            dataGridView1.DataSource = dataTable;
+            koneksi.Close();
         }
     }
 }
